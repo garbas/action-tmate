@@ -91,11 +91,12 @@ export async function run() {
         } else if (distro === "arch") {
           // partial upgrades are not supported so also upgrade everything
           await execShellCommand(optionalSudoPrefix + 'pacman -Syu --noconfirm xz openssh');
-        } else if (distro === "fedora" || distro === "amzn") {
-          core.debug("YAAY! WORKS.");
+        } else if (distro === "fedora") {
           await execShellCommand(optionalSudoPrefix + 'dnf install -y xz openssh');
+        } else if (distro === "amzn") {
+          core.debug("YAAY! WORKS.");
+          await execShellCommand(optionalSudoPrefix + 'yum install -y xz openssh');
         } else {
-          core.debug("linux distro: [" + distro + "]");
           await execShellCommand(optionalSudoPrefix + 'apt-get update');
           await execShellCommand(optionalSudoPrefix + 'apt-get install -y openssh-client xz-utils');
         }
