@@ -84,6 +84,7 @@ export async function run() {
         const optionalSudoPrefix = useSudoPrefix() ? "sudo " : "";
         const distro = await getLinuxDistro();
         core.debug("linux distro: [" + distro + "]");
+        core.debug("This is correct version: " + distro);
         if (distro === "alpine") {
           // for set -e workaround, we need to install bash because alpine doesn't have it
           await execShellCommand(optionalSudoPrefix + 'apk add openssh-client xz bash');
@@ -91,8 +92,10 @@ export async function run() {
           // partial upgrades are not supported so also upgrade everything
           await execShellCommand(optionalSudoPrefix + 'pacman -Syu --noconfirm xz openssh');
         } else if (distro === "fedora" || distro === "amzn") {
+          core.debug("YAAY! WORKS.");
           await execShellCommand(optionalSudoPrefix + 'dnf install -y xz openssh');
         } else {
+          core.debug("linux distro: [" + distro + "]");
           await execShellCommand(optionalSudoPrefix + 'apt-get update');
           await execShellCommand(optionalSudoPrefix + 'apt-get install -y openssh-client xz-utils');
         }
